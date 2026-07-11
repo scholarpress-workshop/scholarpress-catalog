@@ -1,0 +1,6 @@
+project_name: "scholarpress-catalog"
+languages: []
+encoding: "utf-8"
+ignore_all_files_in_gitignore: true
+ls_workspace_folders:
+- .
