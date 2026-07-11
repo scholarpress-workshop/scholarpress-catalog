@@ -1,0 +1,5 @@
+*.Zone.Identifier
+*.sec.endpointdlp
+*.tmp-*
+.tmp-*
+.DS_Store
