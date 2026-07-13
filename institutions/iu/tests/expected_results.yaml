@@ -1,0 +1,55 @@
+fixtures:
+  baseline.pdf:
+    assert_fails: []
+    assert_passes: ["ALL"]
+    ignore_others: true
+
+  golden.pdf:
+    assert_fails: []
+    assert_passes: ["ALL"]
+    ignore_others: true
+
+  left-narrow.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  right-narrow.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  left-wide.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  right-wide.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  top-narrow.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  bottom-narrow.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  top-wide.pdf:
+    assert_fails: ["global_margins"]
+    assert_passes: []
+    ignore_others: true
+
+  asymmetric.pdf:
+    assert_fails: ["margin_symmetry"]
+    assert_passes: []
+    ignore_others: true
+
+  messy.pdf:
+    assert_fails: []
+    assert_passes: []
+    ignore_others: true

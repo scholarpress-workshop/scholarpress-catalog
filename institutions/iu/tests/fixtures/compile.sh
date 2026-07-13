@@ -45,3 +45,10 @@ typst compile --root "$ROOT" "$DIR/synthetic-messy.typ" "$DIR/messy.pdf"
 echo
 echo "Done. All PDFs in $DIR/"
 ls -la "$DIR"/*.pdf
+
+echo
+echo "=== Generating golden baseline from institution template ==="
+typst compile --root "$ROOT/../../template" \
+  "$ROOT/../../template/template.typ" \
+  "$DIR/golden.pdf"
+echo "Golden baseline: $DIR/golden.pdf"
