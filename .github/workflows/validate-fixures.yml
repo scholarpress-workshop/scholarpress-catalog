@@ -1,0 +1,29 @@
+name: Validate Fixtures
+on:
+  repository_dispatch:
+    types: [image-published]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install typst
+        run: |
+          curl -fsSL https://github.com/typst/typst/releases/latest/download/typst-x86_64-unknown-linux-musl.tar.xz | tar xJ
+          sudo mv typst /usr/local/bin/
+      - name: Generate fixtures
+        run: bash compile.sh
+        working-directory: institutions/iu/tests/fixtures
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Validate fixtures
+        run: bash validate_fixtures.sh
+        working-directory: institutions/iu/tests
