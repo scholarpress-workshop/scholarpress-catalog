@@ -1,10 +1,10 @@
-# scholarpress-catalog
+# ScholarPress Catalog
 
 <img src="catalog_owl.jpg" alt="scholarpress-catalog logo" width="180" align="right">
 
 Open-data registry of formatting profiles, Typst templates, and test fixtures for the [ScholarPress](https://github.com/scholarpress-workshop) ecosystem.
 
-**Zero code dependencies** — pure data repository consumed by [`scholarpress-backend`](https://github.com/scholarpress-workshop/scholarpress-backend) (Rust) for document extraction and validation, and by [`scholarpress-check`](https://github.com/scholarpress-workshop/scholarpress-check) (Python) for legacy PDF checks.
+**Zero code dependencies** — pure data repository consumed by [`scholarpress-backend`](https://github.com/scholarpress-workshop/scholarpress-backend) (Rust) for document extraction and validation.
 
 ## Status
 
@@ -168,8 +168,6 @@ checks:
 | `scholarpress-backend` (Rust) | `CATALOG_PATH` env var → `sp-check::spec::load_spec()` loads `spec.yaml` |
 | `scholarpress-backend` publish-service | `Registry::load(catalog_path)` at startup → loads all institution specs and templates |
 | `scholarpress-cli` | `--spec path/to/spec.yaml` argument |
-| `scholarpress-check` (Python) | `CATALOG_PATH` env var or `../scholarpress-catalog/` sibling fallback |
-| `scholarpress-publish` (Python) | `CATALOG_PATH` → loads `.yaml` + `.typ` files |
 
 ## Fixture validation
 
