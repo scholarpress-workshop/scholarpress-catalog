@@ -2,20 +2,32 @@
 set -euo pipefail
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
-IMAGE="ghcr.io/scholarpress-workshop/scholarpress-backend-publish-service:latest"
+IMAGE="${SCHOLARPRESS_IMAGE:-ghcr.io/scholarpress-workshop/scholarpress-backend-publish-service:latest}"
 CATALOG_MOUNT="/catalog"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+FIXTURES_DIR="$(cd "$SCRIPT_DIR/fixtures" && pwd)"
+CATALOG_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+
 FAIL_COUNT=0
 PASS_COUNT=0
 
+parse_yaml() {
+  python3 -c "
+import yaml, sys, json
+with open(sys.argv[1]) as f:
+    data = yaml.safe_load(f)
+print(json.dumps(data))
+" "$1"
+}
+
 run_check() {
   local pdf="$1"
-  docker run --rm \
-    -v "$(cd "$DIR/../../.." && pwd):$CATALOG_MOUNT:ro" \
-    "$IMAGE" \
-    scholarpress check \
-      --spec "$CATALOG_MOUNT/iu/spec.yaml" \
-      --json --quiet \
-      "$CATALOG_MOUNT/iu/tests/fixtures/$pdf" 2>/dev/null
+  if command -v scholarpress &>/dev/null; then
+    scholarpress check --spec "$CATALOG_ROOT/institutions/iu/spec.yaml" --json "$pdf" 2>/dev/null
+  else
+    cargo run --manifest-path "$(cd "$SCRIPT_DIR/../../../.." 2>/dev/null && pwd || echo .)/scholarpress-backend/Cargo.toml" -q -p scholarpress-cli -- check --spec "$CATALOG_ROOT/institutions/iu/spec.yaml" --json "$pdf" 2>/dev/null
+  fi
 }
 
 assert_fails() {
@@ -30,8 +42,29 @@ if not results: sys.exit(1)
 if results[0]['status'] not in ('FAIL', 'ERROR'): sys.exit(1)
 " 2>/dev/null; then
     echo "  PASS: $check_id fails as expected"
+    return 0
   else
-    echo "  FAIL: expected $check_id to FAIL in $pdf"
+    echo "  FAIL: expected $check_id to FAIL in $(basename "$pdf")"
+    return 1
+  fi
+}
+
+assert_passes() {
+  local pdf="$1" check_id="$2"
+  local output
+  output=$(run_check "$pdf")
+  if echo "$output" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+results = [r for r in data.get('results', []) if r['check_id'] == '$check_id']
+if not results: sys.exit(1)
+if results[0]['status'] not in ('FAIL', 'ERROR'): sys.exit(0)
+sys.exit(1)
+" 2>/dev/null; then
+    echo "  PASS: $check_id passes as expected"
+    return 0
+  else
+    echo "  FAIL: expected $check_id to PASS in $(basename "$pdf")"
     return 1
   fi
 }
@@ -50,38 +83,64 @@ print('\n'.join(fails))
 " 2>/dev/null)
   if [ -z "$failures" ]; then
     echo "  PASS: all automatable checks pass"
+    return 0
   else
-    echo "  FAIL: unexpected failures in $pdf: $failures"
+    echo "  FAIL: unexpected failures in $(basename "$pdf"): $failures"
     return 1
   fi
 }
 
 echo "=== Catalog Fixture Validation ==="
-echo "Image: $IMAGE"
-echo
 
-for pdf in "$DIR/fixtures"/*.pdf; do
+EXPECTED=$(parse_yaml "$DIR/expected_results.yaml")
+
+for pdf in "$FIXTURES_DIR"/*.pdf; do
   name=$(basename "$pdf")
   echo "--- $name ---"
 
-  case "$name" in
-    baseline.pdf|golden.pdf)
-      assert_all_pass "$name" && ((PASS_COUNT+=1)) || ((FAIL_COUNT+=1))
-      ;;
-    left-narrow.pdf|right-narrow.pdf|left-wide.pdf|right-wide.pdf|top-narrow.pdf|bottom-narrow.pdf|top-wide.pdf)
-      assert_fails "$name" "global_margins" && ((PASS_COUNT+=1)) || ((FAIL_COUNT+=1))
-      ;;
-    asymmetric.pdf)
-      assert_fails "$name" "margin_symmetry" && ((PASS_COUNT+=1)) || ((FAIL_COUNT+=1))
-      ;;
-    messy.pdf)
-      echo "  SKIP: smoke test only"
-      ((PASS_COUNT+=1))
-      ;;
-    *)
-      echo "  SKIP: no expected results defined"
-      ;;
-  esac
+  assertions=$(echo "$EXPECTED" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+fixtures = data.get('fixtures', {})
+if '$name' not in fixtures:
+    sys.exit(0)
+f = fixtures['$name']
+print(json.dumps(f))
+" 2>/dev/null) || { echo "  SKIP: no expected results defined"; echo; continue; }
+
+  assert_passes_list=$(echo "$assertions" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print('\n'.join(d.get('assert_passes', [])))
+" 2>/dev/null)
+
+  assert_fails_list=$(echo "$assertions" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print('\n'.join(d.get('assert_fails', [])))
+" 2>/dev/null)
+
+  pdf_passed=true
+
+  if [ "$assert_passes_list" = "ALL" ]; then
+    assert_all_pass "$pdf" || pdf_passed=false
+  else
+    while IFS= read -r check_id; do
+      [ -z "$check_id" ] && continue
+      assert_passes "$pdf" "$check_id" || pdf_passed=false
+    done <<< "$assert_passes_list"
+  fi
+
+  while IFS= read -r check_id; do
+    [ -z "$check_id" ] && continue
+    assert_fails "$pdf" "$check_id" || pdf_passed=false
+  done <<< "$assert_fails_list"
+
+  if [ "$pdf_passed" = true ]; then
+    ((PASS_COUNT+=1))
+  else
+    ((FAIL_COUNT+=1))
+  fi
   echo
 done
 

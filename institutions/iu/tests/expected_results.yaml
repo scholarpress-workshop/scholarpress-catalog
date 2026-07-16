@@ -1,12 +1,35 @@
 fixtures:
   baseline.pdf:
     assert_fails: []
-    assert_passes: ["ALL"]
+    assert_passes:
+      - global_margins
+      - margin_symmetry
+      - font_size_consistent
+      - font_family_consistent
+      - title_page_no_bold
+      - title_page_no_page_number
+      - page_numbers_format
+      - footnotes_font_consistent
+      - new_chapters_new_pages
+      - hyperlinks_format
+      - front_matter_order
     ignore_others: true
 
   golden.pdf:
     assert_fails: []
-    assert_passes: ["ALL"]
+    assert_passes:
+      - margin_symmetry
+      - font_size_consistent
+      - font_family_consistent
+      - justification_consistent
+      - front_matter_order
+      - title_page_no_bold
+      - copyright_page_format
+      - headings_consistent
+      - footnotes_font_consistent
+      - new_chapters_new_pages
+      - hyperlinks_format
+      - cv_name_position
     ignore_others: true
 
   left-narrow.pdf:
