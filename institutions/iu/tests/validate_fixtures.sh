@@ -5,9 +5,9 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 IMAGE="${SCHOLARPRESS_IMAGE:-ghcr.io/scholarpress-workshop/scholarpress-backend-publish-service:latest}"
 CATALOG_MOUNT="/catalog"
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-FIXTURES_DIR="$(cd "$SCRIPT_DIR/fixtures" && pwd)"
-CATALOG_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+SCRIPT_DIR="$DIR"
+FIXTURES_DIR="$DIR/fixtures"
+CATALOG_ROOT="$(cd "$DIR/../../.." && pwd)"
 
 FAIL_COUNT=0
 PASS_COUNT=0
@@ -23,11 +23,13 @@ print(json.dumps(data))
 
 run_check() {
   local pdf="$1"
-  if command -v scholarpress &>/dev/null; then
-    scholarpress check --spec "$CATALOG_ROOT/institutions/iu/spec.yaml" --json "$pdf" 2>/dev/null
-  else
-    cargo run --manifest-path "$(cd "$SCRIPT_DIR/../../../.." 2>/dev/null && pwd || echo .)/scholarpress-backend/Cargo.toml" -q -p scholarpress-cli -- check --spec "$CATALOG_ROOT/institutions/iu/spec.yaml" --json "$pdf" 2>/dev/null
-  fi
+  docker run --rm \
+    -v "$CATALOG_ROOT:$CATALOG_MOUNT:ro" \
+    "$IMAGE" \
+    scholarpress check \
+      --spec "$CATALOG_MOUNT/institutions/iu/spec.yaml" \
+      --json \
+      "$CATALOG_MOUNT/institutions/iu/tests/fixtures/$(basename "$pdf")" 2>/dev/null
 }
 
 assert_fails() {
