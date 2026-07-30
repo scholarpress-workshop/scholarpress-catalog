@@ -51,7 +51,12 @@
   body
 }
 
-// Global metadata — defined once, read by all section functions.
+// INSTITUTION METADATA — set these once; all section functions read them.
+//   committee-members = ((name: "...", degree: "...", role: "..."), ...)
+//   defense-date = "May 2026"
+//   school-name / degree-name / department-name / campus-name / grad-month / grad-year
+//
+// number-to-word(n) — converts "1" → "ONE" for spelled-out chapter titles.
 #let committee-members = ()
 #let defense-date = ""
 #let school-name = "Indiana University"
