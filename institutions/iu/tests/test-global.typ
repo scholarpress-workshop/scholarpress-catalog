@@ -1,18 +1,18 @@
 // Zero-arg test: all metadata set via globals, no per-section overrides.
 // Compile with: typst compile test-global.typ
 
-#import "styles.typ": iu-page-setup, iu-heading-size, iu-body-font
-#import "sections/title-page.typ": title-page
-#import "sections/acceptance.typ": acceptance-page
-#import "sections/copyright.typ": copyright-page
-#import "sections/dedication.typ": dedication-page
-#import "sections/acknowledgements.typ": acknowledgements-page
-#import "sections/preface.typ": preface-page
-#import "sections/abstract.typ": abstract-page
-#import "sections/toc.typ": toc-page
-#import "sections/chapters.typ": chapter
-#import "sections/references.typ": references-page
-#import "sections/cv.typ": curriculum-vitae
+#import "../template/styles.typ": iu-page-setup, iu-heading-size, iu-body-font
+#import "../template/sections/title-page.typ": title-page
+#import "../template/sections/acceptance.typ": acceptance-page
+#import "../template/sections/copyright.typ": copyright-page
+#import "../template/sections/dedication.typ": dedication-page
+#import "../template/sections/acknowledgements.typ": acknowledgements-page
+#import "../template/sections/preface.typ": preface-page
+#import "../template/sections/abstract.typ": abstract-page
+#import "../template/sections/toc.typ": toc-page
+#import "../template/sections/chapters.typ": chapter
+#import "../template/sections/references.typ": references-page
+#import "../template/sections/cv.typ": curriculum-vitae
 
 #set page(
   margin: (top: 1in, bottom: 1in, left: 1.25in, right: 1.25in),

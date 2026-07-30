@@ -1,11 +1,11 @@
 // Test: chapter file import convention.
 // Compile with: typst compile test-chapters.typ
 
-#import "styles.typ": iu-page-setup, iu-heading-size, iu-body-font
-#import "sections/title-page.typ": title-page
-#import "sections/acceptance.typ": acceptance-page
-#import "sections/chapters.typ": chapter
-#import "chapters/ch01.typ": historical-context
+#import "../template/styles.typ": iu-page-setup, iu-heading-size, iu-body-font
+#import "../template/sections/title-page.typ": title-page
+#import "../template/sections/acceptance.typ": acceptance-page
+#import "../template/sections/chapters.typ": chapter
+#import "../template/chapters/ch01.typ": historical-context
 
 #set page(
   margin: (top: 1in, bottom: 1in, left: 1.25in, right: 1.25in),
