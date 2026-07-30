@@ -24,23 +24,18 @@
   body
 }
 
-#let iu-heading(level, title) = {
-  if level == 1 {
-    align(center, underline(text(title)))
-    v(12pt)
-  } else if level == 2 {
-    underline(text(title))
-    v(6pt)
+#let number-to-word(n) = {
+  let words = (
+    "ONE", "TWO", "THREE", "FOUR", "FIVE",
+    "SIX", "SEVEN", "EIGHT", "NINE", "TEN",
+    "ELEVEN", "TWELVE", "THIRTEEN", "FOURTEEN", "FIFTEEN",
+  )
+  let i = int(n)
+  if i >= 1 and i <= words.len() {
+    words.at(i - 1)
   } else {
-    text(style: "italic", title)
-    v(6pt)
+    n
   }
-}
-
-#let iu-chapter-heading(title) = {
-  pagebreak()
-  align(center, text(iu-heading-size, upper(title)))
-  v(24pt)
 }
 
 #let iu-toc-entry(title, page) = {

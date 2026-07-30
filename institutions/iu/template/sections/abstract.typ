@@ -1,4 +1,4 @@
-#import "../styles.typ": iu-heading, iu-body-size, iu-body-font, committee-members
+#import "../styles.typ": iu-body-size, iu-body-font, committee-members
 
 #let abstract-page(
   heading: "Abstract",
