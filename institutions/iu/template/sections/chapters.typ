@@ -21,15 +21,23 @@
       v(24pt)
     }
 
-    // H2 (`==`): centered, underlined, regular weight
+    // H2 (`==`): centered, underlined, regular weight, body size
     #show heading.where(level: 2): it => {
-      align(center, underline(it))
+      align(center, text(
+        weight: "regular",
+        size: iu-body-size,
+        underline(it),
+      ))
       v(12pt)
     }
 
-    // H3 (`===`): left-aligned, underlined, regular weight
+    // H3 (`===`): left-aligned, underlined, regular weight, body size
     #show heading.where(level: 3): it => {
-      underline(it)
+      text(
+        weight: "regular",
+        size: iu-body-size,
+        underline(it),
+      )
       v(6pt)
     }
 
