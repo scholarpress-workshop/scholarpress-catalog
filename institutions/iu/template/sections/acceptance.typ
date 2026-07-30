@@ -1,8 +1,8 @@
-#import "../styles.typ": iu-body-size
+#import "../styles.typ": iu-body-size, committee-members, defense-date
 
 #let acceptance-page(
-  committee: (),
-  defense_date: "",
+  committee: committee-members,
+  defense_date: defense-date,
 ) = {
   pagebreak()
   [
