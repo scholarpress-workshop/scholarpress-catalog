@@ -1,5 +1,16 @@
 #import "../styles.typ": iu-body-size, iu-body-font, number-to-word
 
+/// Renders a dissertation chapter.
+///
+/// Heading hierarchy (scoped to chapter body, front matter unaffected):
+///   == H2 — centered, underlined, numbered "1.1", regular weight
+///   === H3 — left-aligned, underlined, numbered "1.1.1", regular weight
+///
+/// Use `first: true` on the first body chapter to reset page numbering
+/// from Roman numerals (front matter) to Arabic (chapter body).
+///
+/// All parameters are NAMED. Call as:
+///   #chapter(number: "1", title: "Introduction", body: intro-content, first: true)
 #let chapter(number: "", title: "", body: [], first: false) = {
   pagebreak()
 
