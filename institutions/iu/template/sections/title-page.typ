@@ -1,11 +1,4 @@
-#import "../styles.typ": iu-body-size
-
-#let school-name = "Indiana University"
-#let degree-name = "Doctor of Philosophy"
-#let department-name = ""
-#let campus-name = ""
-#let grad-month = ""
-#let grad-year = ""
+#import "../styles.typ": iu-body-size, school-name, degree-name, department-name, campus-name, grad-month, grad-year
 
 #let title-page(
   title: none,

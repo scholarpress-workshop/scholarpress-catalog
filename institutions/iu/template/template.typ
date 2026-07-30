@@ -26,12 +26,3 @@
   title: [],
   author: "",
 )
-
-#let committee-members = ()
-#let defense-date = ""
-#let school-name = "Indiana University"
-#let degree-name = "Doctor of Philosophy"
-#let department-name = ""
-#let campus-name = ""
-#let grad-month = ""
-#let grad-year = ""
