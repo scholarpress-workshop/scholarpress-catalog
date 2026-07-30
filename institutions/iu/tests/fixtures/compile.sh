@@ -47,8 +47,8 @@ echo "Done. All PDFs in $DIR/"
 ls -la "$DIR"/*.pdf
 
 echo
-echo "=== Generating golden baseline from institution template ==="
-typst compile --root "$ROOT/../../template" \
-  "$ROOT/../../template/template.typ" \
+echo "=== Generating golden baseline from test-global.typ ==="
+typst compile --root "$ROOT/../.." \
+  "$ROOT/../test-global.typ" \
   "$DIR/golden.pdf"
 echo "Golden baseline: $DIR/golden.pdf"
