@@ -5,7 +5,7 @@
 //   #chapter(number: "1", title: "Historical Context", body: historical-context, first: true)
 
 #let historical-context = [
-  = Historiography of Glacier Science
+  == Historiography of Glacier Science
 
   The study of glacial dynamics emerged in the late 19th century when
   naturalists first observed that glaciers were not static formations but
@@ -14,7 +14,7 @@
   burying pastures and revealing ancient tree stumps. These observations,
   though anecdotal, laid the groundwork for systematic scientific inquiry.
 
-  == Early Observations
+  === Early Observations
 
   Louis Agassiz, a Swiss naturalist, was among the first to propose that
   glaciers had once covered much of Europe during an "Ice Age" — a radical
@@ -23,6 +23,8 @@
   and erratic boulders far from their source. His work demonstrated that
   glaciers were powerful geological agents, capable of reshaping
   landscapes over millennia.
+
+  === Institutional Resistance
 
   Agassiz's contemporaries were initially skeptical. The notion that ice
   sheets could have extended from the poles to the Mediterranean seemed
