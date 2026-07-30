@@ -32,4 +32,36 @@
   the British Isles, and North America had convinced most of the
   scientific community. Geologists began mapping terminal moraines and
   tracing the extent of Pleistocene ice sheets across continents.
+
+  == Visual Evidence
+
+  The following figures illustrate key concepts in glacier science.
+
+  #figure(
+    image("../../tests/fig-2-1.png", width: 80%),
+    caption: [Glacier morphology diagram showing accumulation and ablation zones.],
+  )
+
+  #figure(
+    image("../../tests/fig-3-1.png", width: 80%),
+    caption: [Cross-section of a valley glacier illustrating flow dynamics.],
+  )
+
+  == Comparative Analysis
+
+  Additional data supports the glacier dynamics model. Figures 4-1 and 4-2
+  below show temperature and pressure gradients across multiple field sites.
+
+  #figure(
+    image("../../tests/fig-4-1.png", width: 80%),
+    caption: [Temperature gradients measured at three field sites (2018-2024).],
+  ) <fig-temp>
+
+  #figure(
+    image("../../tests/fig-4-2.png", width: 80%),
+    caption: [Pressure distribution across the ablation zone.],
+  ) <fig-pressure>
+
+  As shown in @fig-temp and @fig-pressure, the data supports the theoretical
+  framework established in Chapter 2.
 ]
