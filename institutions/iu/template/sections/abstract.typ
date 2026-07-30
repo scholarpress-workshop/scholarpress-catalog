@@ -8,7 +8,7 @@
   committee: committee-members,
 ) = {
   context {
-    let a = if author != none { author } else { document.author }
+    let a = if author != none { author } else { document.author.first() }
     let t = if title != none { title } else { document.title }
     pagebreak()
     [

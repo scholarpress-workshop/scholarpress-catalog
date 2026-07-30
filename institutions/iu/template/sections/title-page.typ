@@ -12,7 +12,7 @@
 ) = {
   context {
     let t = if title != none { title } else { document.title }
-    let a = if author != none { author } else { document.author }
+    let a = if author != none { author } else { document.author.first() }
     [
       #set page(numbering: none)
       #align(center, text(size: iu-body-size, weight: "regular", upper(t)))

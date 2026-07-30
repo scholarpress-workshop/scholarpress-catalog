@@ -52,14 +52,14 @@
 )
 #toc-page()
 #chapter(number: "1", title: "Introduction", body: [
-  = Background
+  == Background
   This is a test chapter.
 
-  == Subsection
+  === Subsection
   More content here.
 ], first: true)
 #chapter(number: "2", title: "Methods", body: [
-  = Experimental Design
+  == Experimental Design
   The experiment was designed to test...
 ])
 #references-page(entries: [

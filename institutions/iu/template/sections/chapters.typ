@@ -2,46 +2,38 @@
 
 #let chapter(number: "", title: "", body: [], first: false) = {
   pagebreak()
+
   [
+    #set heading(numbering: "1.1")
+    #counter(heading).update(0)
     #if first {
       counter(page).update(1)
     }
     #set page(numbering: "1")
 
-    // Heading numbering: `==` gets "1.1", `===` gets "1.1.1"
-    #set heading(numbering: "1.1")
-    counter(heading).update(0)
+    // Chapter title — show rule only applies styling, doesn't replace heading
+    #show heading.where(level: 1): it => {
+      align(center, text(
+        size: iu-body-size,
+        weight: "regular",
+        upper(it.body),
+      ))
+      v(24pt)
+    }
 
-    // H2 (`==`): centered, title case, underlined, regular weight, single line
+    // H2 (`==`): centered, underlined, regular weight
     #show heading.where(level: 2): it => {
-      align(
-        center,
-        underline(
-          text(
-            size: iu-body-size,
-            font: iu-body-font,
-            weight: "regular",
-            it.body,
-          ),
-        ),
-      )
+      align(center, underline(it))
       v(12pt)
     }
 
-    // H3 (`===`): left-aligned, title case, underlined, regular weight, single line
+    // H3 (`===`): left-aligned, underlined, regular weight
     #show heading.where(level: 3): it => {
-      underline(
-        text(
-          size: iu-body-size,
-          font: iu-body-font,
-          weight: "regular",
-          it.body,
-        ),
-      )
+      underline(it)
       v(6pt)
     }
 
-    // Figure/equation show rules (unchanged from original)
+    // Figure/equation show rules
     #set figure(gap: 2em)
     #show figure.caption: it => {
       set text(size: iu-body-size)
@@ -71,17 +63,10 @@
       }
     }
 
-    // Chapter title — spelled-out number, centered, all caps, regular weight
-    #align(center)[
-      #text(size: iu-body-size, weight: "regular", upper(
-        "CHAPTER " + number-to-word(number)
-      )) \
-      #text(size: iu-body-size, weight: "regular", upper(title))
-    ]
-    #v(24pt)
-
-    // Advance heading counter so `==` in body gets "1.1" (not just "1")
-    counter(heading).step()
+    // Chapter title as a real heading (level 1). The show rule above
+    // styles it; the counter advances. Body headings (==/===) inherit
+    // the numbering and show rules.
+    = #upper("chapter " + number-to-word(number) + "\n" + title)
 
     #body
   ]
