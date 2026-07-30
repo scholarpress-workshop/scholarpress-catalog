@@ -1,43 +1,47 @@
-#import "../styles.typ": iu-heading, iu-body-size, iu-body-font
+#import "../styles.typ": iu-heading, iu-body-size, iu-body-font, committee-members
 
 #let abstract-page(
   heading: "Abstract",
-  author: "",
-  title: "",
+  author: none,
+  title: none,
   body: "",
-  committee: (),
+  committee: committee-members,
 ) = {
-  pagebreak()
-  [
-    #if heading != "" [
-      #align(center, text(iu-body-size, upper(heading)))
-      #v(12pt)
-    ]
+  context {
+    let a = if author != none { author } else { document.author }
+    let t = if title != none { title } else { document.title }
+    pagebreak()
+    [
+      #if heading != "" [
+        #align(center, text(iu-body-size, upper(heading)))
+        #v(12pt)
+      ]
 
-    #if author != "" [
-      #align(center, text(size: iu-body-size)[#author])
-      #v(12pt)
-    ]
+      #if a != "" [
+        #align(center, text(size: iu-body-size)[#a])
+        #v(12pt)
+      ]
 
-    #if title != "" [
-      #align(center, text(size: iu-body-size, upper(title)))
-      #v(12pt)
-    ]
+      #if t != "" [
+        #align(center, text(size: iu-body-size, upper(t)))
+        #v(12pt)
+      ]
 
-    #text(size: iu-body-size)[#body]
+      #text(size: iu-body-size)[#body]
 
-    #if committee.len() > 0 [
-      #v(24pt)
-      #align(right)[
-        #for member in committee [
-          #v(24pt)
-          #line(length: 2.5in)
-          #v(4pt)
-          #member.name
-          #if member.degree != "" [, #member.degree]
-          #if member.role != "" [, #member.role]
+      #if committee.len() > 0 [
+        #v(24pt)
+        #align(right)[
+          #for member in committee [
+            #v(24pt)
+            #line(length: 2.5in)
+            #v(4pt)
+            #member.name
+            #if member.degree != "" [, #member.degree]
+            #if member.role != "" [, #member.role]
+          ]
         ]
       ]
     ]
-  ]
+  }
 }
