@@ -8,6 +8,20 @@
 //
 //   Content blocks are passed via `body: [...]` parameters.
 //
+//   Example entry file wiring:
+//     #import "template/template.typ": title-page, dedication-page, toc-page,
+//       abstract-page, acknowledgements-page, preface-page, chapter,
+//       references-page, curriculum-vitae
+//
+//     #title-page()
+//     #dedication-page(body: [dedication text])
+//     #toc-page(entries: toc_data)
+//     #abstract-page(body: [abstract text])
+//     ...
+//
+//   $ IN PROSE — $ starts Typst math mode. Dollar amounts, grant IDs, and
+//   any prose containing $ must use \$ to escape (e.g., \$17 million).
+//
 // GLOBAL METADATA
 //   Set once at top: #set document(title: [...], author: "Name")
 //   Custom metadata (committee, dates, school, etc.): #let vars in styles.typ
