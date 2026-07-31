@@ -2,9 +2,17 @@
 // with a descriptive kebab-case name. template.typ imports it via
 //   #import "chapters/ch01.typ": historical-context
 // and passes it to the chapter() function:
-//   #chapter(number: "1", title: "Historical Context", body: historical-context, first: true)
+//   #chapter(number: "1", title: "Historical Context",
+// body: historical-context, first: true)
 
 #let historical-context = [
+  // Do not put H1 chapter title heading here, it will automatically
+  // be rendered by the chapter() function.
+
+  // *Do* list H2 and H3 headings here, but do *not* include section
+  // numbers, these will also be automatically rendered.
+
+  // Note this is just example content — replace it with your own.
   == Historiography of Glacier Science
 
   The study of glacial dynamics emerged in the late 19th century when
