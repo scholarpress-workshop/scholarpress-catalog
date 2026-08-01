@@ -4,6 +4,7 @@ on:
     paths:
       - 'institutions/*/template/sections/*.typ'
       - 'institutions/*/template/template.typ'
+      - 'institutions/*/template/generate-json-ref.typ'
   workflow_dispatch:
 
 jobs:
@@ -20,10 +21,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
       - name: Generate REFERENCE.json
         run: |
+          set -euo pipefail
           for profile_dir in institutions/*/template/; do
             if [ -f "$profile_dir/generate-json-ref.typ" ]; then
               echo "::group::Generating REFERENCE.json for ${profile_dir}"
-              typst eval 'query(<ref>).first().value' --in "$profile_dir/generate-json-ref.typ" --root "$profile_dir" 2>/dev/null | python3 -c "import sys,json; s=json.loads(sys.stdin.read()); data=json.loads(s); print(json.dumps(data, indent=2))" > "$profile_dir/REFERENCE.json"
+              typst eval 'query(<ref>).first().value' --in "$profile_dir/generate-json-ref.typ" --root "$profile_dir" > /tmp/typst_output.json
+              python3 -c "import sys,json; s=json.loads(sys.stdin.read()); data=json.loads(s); print(json.dumps(data, indent=2))" < /tmp/typst_output.json > "$profile_dir/REFERENCE.json"
               echo "::endgroup::"
             fi
           done
