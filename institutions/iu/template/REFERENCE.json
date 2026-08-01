@@ -1,0 +1,423 @@
+{
+  "profile": "institutions/iu",
+  "globals": [
+    {
+      "key": "page_numbering",
+      "description": "Front matter uses Roman numerals (\"i\") set at template level. Chapter body switches to Arabic (\"1\") via `chapter(first: true)` which calls `counter(page).update(1)` and `set page(numbering: \"1\")`."
+    },
+    {
+      "key": "data_json",
+      "description": "Write structured data to <workspace>/data.json before compile. Template reads via `json(\"data.json\")` or `read(\"data.json\")`."
+    },
+    {
+      "key": "heading_hierarchy",
+      "description": "chapter() renders = (H1). Inside chapter body: == (H2: centered, underlined, numbered 1.1) and === (H3: left-aligned, underlined, numbered 1.1.1)."
+    },
+    {
+      "key": "dollar_signs",
+      "description": "$ starts math mode in Typst prose. Use \\$ to escape (e.g., \\$17 million)."
+    },
+    {
+      "key": "chapter_per_file",
+      "description": "Each chapter is one file in `chapters/`. ch01.typ exports `#let ch-name = [...]`. Entry file imports and calls `#chapter(number: \"1\", title: \"Title\", body: ch-name, first: true)`."
+    }
+  ],
+  "functions": [
+    {
+      "name": "title-page",
+      "file": "sections/title-page.typ",
+      "signature": "title-page(title: none, author: none, school: school-name, degree: degree-name, department: department-name, campus: campus-name, month: grad-month, year: grad-year)",
+      "description": "Renders the dissertation title page.\n Reads `document.title` and `document.author.first()` from globals\n when `title` or `author` are `none`. Set globals in entry.typ:\n   `#set document(title: \"My Title\", author: \"Jane Doe\")`\n Then call `#title-page()` with zero arguments.\n Custom metadata (school, degree, department, campus, month, year)\n defaults to values from `styles.typ`.\n\n @example\n ```typ\n #title-page(title: \"A Study of X\", author: \"Jane Doe\")\n ```\n @endexample",
+      "params": [
+        {
+          "name": "title",
+          "type": "str | none",
+          "default": "none",
+          "description": "Dissertation title (falls back to document.title)"
+        },
+        {
+          "name": "author",
+          "type": "str | none",
+          "default": "none",
+          "description": "Author name (falls back to document.author.first())"
+        },
+        {
+          "name": "school",
+          "type": "str",
+          "default": "school-name",
+          "description": "School / college name (default: styles.typ school-name)"
+        },
+        {
+          "name": "degree",
+          "type": "str",
+          "default": "degree-name",
+          "description": "Degree name (default: styles.typ degree-name)"
+        },
+        {
+          "name": "department",
+          "type": "str",
+          "default": "department-name",
+          "description": "Department name (default: styles.typ department-name)"
+        },
+        {
+          "name": "campus",
+          "type": "str",
+          "default": "campus-name",
+          "description": "Campus name (default: styles.typ campus-name)"
+        },
+        {
+          "name": "month",
+          "type": "str",
+          "default": "grad-month",
+          "description": "Graduation month (default: styles.typ grad-month)"
+        },
+        {
+          "name": "year",
+          "type": "str",
+          "default": "grad-year",
+          "description": "Graduation year (default: styles.typ grad-year)"
+        }
+      ]
+    },
+    {
+      "name": "acceptance-page",
+      "file": "sections/acceptance.typ",
+      "signature": "acceptance-page(committee: committee-members, defense_date: defense-date)",
+      "description": "Renders the acceptance page with committee signatures.\n Committee members and defense date default to values from `styles.typ`.\n Override per-workspace via `data.json`.\n\n @example\n ```typ\n #acceptance-page(\n   committee: ((name: \"Dr. Smith\", degree: \"Ph.D.\", role: \"Chair\"),),\n   defense_date: \"May 2026\",\n )\n ```\n @endexample",
+      "params": [
+        {
+          "name": "committee",
+          "type": "array",
+          "default": "committee-members",
+          "description": "Committee members: list of dicts {name: str, degree: str, role: str}"
+        },
+        {
+          "name": "defense_date",
+          "type": "str",
+          "default": "defense-date",
+          "description": "Defense date string (e.g., \"May 2026\")"
+        }
+      ]
+    },
+    {
+      "name": "copyright-page",
+      "file": "sections/copyright.typ",
+      "signature": "copyright-page(year: \"\", author: \"\")",
+      "description": "Renders the copyright page with year and author name centered vertically.\n\n @example\n ```typ\n #copyright-page(year: \"2026\", author: \"Jane Doe\")\n ```\n @endexample",
+      "params": [
+        {
+          "name": "year",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Copyright year"
+        },
+        {
+          "name": "author",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Copyright holder name"
+        }
+      ]
+    },
+    {
+      "name": "dedication-page",
+      "file": "sections/dedication.typ",
+      "signature": "dedication-page(body: [])",
+      "description": "Renders the dedication page. Takes a single content block.\n\n ```example\n #dedication-page(body: [To my family, for their unwavering support.])\n ```",
+      "params": [
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "Dedication text as content block"
+        }
+      ]
+    },
+    {
+      "name": "acknowledgements-page",
+      "file": "sections/acknowledgements.typ",
+      "signature": "acknowledgements-page(title: \"Acknowledgements\", body: [])",
+      "description": "Renders the acknowledgements page.\n\n ```example\n #acknowledgements-page(body: [I would like to thank...])\n ```",
+      "params": [
+        {
+          "name": "title",
+          "type": "str",
+          "default": "\"Acknowledgements\"",
+          "description": "Page heading (default: \"Acknowledgements\")"
+        },
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "Acknowledgements text as content block"
+        }
+      ]
+    },
+    {
+      "name": "preface-page",
+      "file": "sections/preface.typ",
+      "signature": "preface-page(title: \"Preface\", body: [])",
+      "description": "Renders the preface page.\n\n ```example\n #preface-page(title: \"Author's Preface\", body: [This work began...])\n ```",
+      "params": [
+        {
+          "name": "title",
+          "type": "str",
+          "default": "\"Preface\"",
+          "description": "Page heading (default: \"Preface\")"
+        },
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "Preface text as content block"
+        }
+      ]
+    },
+    {
+      "name": "abstract-page",
+      "file": "sections/abstract.typ",
+      "signature": "abstract-page(heading: \"Abstract\", author: none, title: none, body: \"\", committee: committee-members)",
+      "description": "Renders the abstract page with title, author, body text, and committee lines.\n Falls back to `document.title` and `document.author.first()` when title/author\n are `none`. Set globals in entry.typ: `#set document(title: \"...\", author: \"...\")`\n\n ```example\n #abstract-page(\n   heading: \"Abstract\",\n   body: [This dissertation examines...],\n )\n ```",
+      "params": [
+        {
+          "name": "heading",
+          "type": "str",
+          "default": "\"Abstract\"",
+          "description": "Abstract heading text (default: \"Abstract\")"
+        },
+        {
+          "name": "author",
+          "type": "str | none",
+          "default": "none",
+          "description": "Author name (falls back to document.author.first())"
+        },
+        {
+          "name": "title",
+          "type": "str | none",
+          "default": "none",
+          "description": "Dissertation title (falls back to document.title)"
+        },
+        {
+          "name": "body",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Abstract body text"
+        },
+        {
+          "name": "committee",
+          "type": "array",
+          "default": "committee-members",
+          "description": "Committee members: list of dicts {name: str, degree: str, role: str}"
+        }
+      ]
+    },
+    {
+      "name": "toc-page",
+      "file": "sections/toc.typ",
+      "signature": "toc-page(entries: (), cv-page: none)",
+      "description": "Renders the Table of Contents.\n Entries must be a list of dicts, each with named keys:\n   `level` (int) \u2014 heading level (1 = chapter, 2 = section)\n   `title` (str) \u2014 heading text\n   `page` (int) \u2014 page number\n\n @example\n ```typ\n #toc-page(entries: (\n   (level: 1, title: \"Introduction\", page: 1),\n   (level: 2, title: \"Background\", page: 4),\n ))\n ```\n @endexample",
+      "params": [
+        {
+          "name": "entries",
+          "type": "array",
+          "default": "()",
+          "description": "Array of dicts {level: int, title: str, page: int}"
+        },
+        {
+          "name": "cv-page",
+          "type": "int | none",
+          "default": "none",
+          "description": "Page number for the Curriculum Vitae entry. When set, the CV entry\n appears with its page number (currently without leader dots)."
+        }
+      ]
+    },
+    {
+      "name": "list-of-tables",
+      "file": "sections/lot.typ",
+      "signature": "list-of-tables(entries: ())",
+      "description": "Renders the List of Tables.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-tables(entries: (\n   (\"Table 1.1: Sample Results\", 23),\n   (\"Table 2.1: Summary Statistics\", 47),\n ))\n ```\n @endexample",
+      "params": [
+        {
+          "name": "entries",
+          "type": "array",
+          "default": "()",
+          "description": "Array of 2-tuples: (title: str, page: int)"
+        }
+      ]
+    },
+    {
+      "name": "list-of-figures",
+      "file": "sections/lof.typ",
+      "signature": "list-of-figures(entries: ())",
+      "description": "Renders the List of Figures.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-figures(entries: (\n   (\"Figure 1.1: System Architecture\", 15),\n ))\n ```\n @endexample",
+      "params": [
+        {
+          "name": "entries",
+          "type": "array",
+          "default": "()",
+          "description": "Array of 2-tuples: (title: str, page: int)"
+        }
+      ]
+    },
+    {
+      "name": "list-of-pictures",
+      "file": "sections/lop.typ",
+      "signature": "list-of-pictures(entries: ())",
+      "description": "Renders the List of Pictures.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-pictures(entries: (\n   (\"Photo 1: Study Site\", 30),\n ))\n ```\n @endexample",
+      "params": [
+        {
+          "name": "entries",
+          "type": "array",
+          "default": "()",
+          "description": "Array of 2-tuples: (title: str, page: int)"
+        }
+      ]
+    },
+    {
+      "name": "list-of-abbreviations",
+      "file": "sections/loa.typ",
+      "signature": "list-of-abbreviations(entries: ())",
+      "description": "Renders the List of Abbreviations.\n Entries must be a list of **positional 2-tuples** `(abbreviation, meaning)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-abbreviations(entries: (\n   (\"API\", \"Application Programming Interface\"),\n   (\"DOI\", \"Digital Object Identifier\"),\n ))\n ```\n @endexample",
+      "params": [
+        {
+          "name": "entries",
+          "type": "array",
+          "default": "()",
+          "description": "Array of 2-tuples: (abbreviation: str, meaning: str)"
+        }
+      ]
+    },
+    {
+      "name": "chapter",
+      "file": "sections/chapters.typ",
+      "signature": "chapter(number: \"\", title: \"\", body: [], first: false)",
+      "description": "Renders a dissertation chapter with proper heading hierarchy.\n\n Heading hierarchy (scoped to chapter body, front matter unaffected):\n   =  (H1) \u2014 chapter title, centered, underlined, uppercase, spelled-out number\n   == (H2) \u2014 centered, underlined, numbered \"1.1\", regular weight\n   === (H3) \u2014 left-aligned, underlined, numbered \"1.1.1\", regular weight\n\n Use `first: true` on the first body chapter to:\n   - Reset page counter to 1 (`counter(page).update(1)`)\n   - Switch page numbering from Roman (front matter) to Arabic (body)\n\n ```example\n #chapter(number: \"1\", title: \"Introduction\", body: intro-body, first: true)\n ```",
+      "params": [
+        {
+          "name": "number",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Chapter number as string (e.g., \"1\", \"2\"). Spelled out in heading."
+        },
+        {
+          "name": "title",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Chapter title text"
+        },
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "Chapter body as content block (write `==` and `===` headings inside)"
+        },
+        {
+          "name": "first",
+          "type": "bool",
+          "default": "false",
+          "description": "Set true for first body chapter to reset page numbering to Arabic"
+        }
+      ]
+    },
+    {
+      "name": "references-page",
+      "file": "sections/references.typ",
+      "signature": "references-page(entries: [])",
+      "description": "Renders the References page.\n Entries are **raw content** \u2014 NOT tuples or dicts.\n Pass citation text directly as a content block.\n\n @example\n ```typ\n #references-page(entries: [\n   Author, A. (2020). Title of work. *Journal*, 12(3), 45--67.\n\n   Author, B. (2021). Another title. *Publisher*.\n ])\n ```\n @endexample",
+      "params": [
+        {
+          "name": "entries",
+          "type": "content",
+          "default": "[]",
+          "description": "Raw content block containing formatted reference text"
+        }
+      ]
+    },
+    {
+      "name": "appendices-section",
+      "file": "sections/appendices.typ",
+      "signature": "appendices-section()",
+      "description": "Renders the appendices divider page. Call once before individual appendix pages.",
+      "params": []
+    },
+    {
+      "name": "appendix",
+      "file": "sections/appendices.typ",
+      "signature": "appendix(label: \"A\", title: \"\", body: [])",
+      "description": "Renders an individual appendix with a letter label and title.\n\n ```example\n #appendix(label: \"A\", title: \"Survey Instrument\", body: [Survey details...])\n ```",
+      "params": [
+        {
+          "name": "label",
+          "type": "str",
+          "default": "\"A\"",
+          "description": "Appendix letter label (e.g., \"A\", \"B\")"
+        },
+        {
+          "name": "title",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Appendix title text"
+        },
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "Appendix body as content block"
+        }
+      ]
+    },
+    {
+      "name": "appendices-section",
+      "file": "sections/appendices.typ",
+      "signature": "appendices-section()",
+      "description": "Renders the appendices divider page. Call once before individual appendix pages.",
+      "params": []
+    },
+    {
+      "name": "appendix",
+      "file": "sections/appendices.typ",
+      "signature": "appendix(label: \"A\", title: \"\", body: [])",
+      "description": "Renders an individual appendix with a letter label and title.\n\n ```example\n #appendix(label: \"A\", title: \"Survey Instrument\", body: [Survey details...])\n ```",
+      "params": [
+        {
+          "name": "label",
+          "type": "str",
+          "default": "\"A\"",
+          "description": "Appendix letter label (e.g., \"A\", \"B\")"
+        },
+        {
+          "name": "title",
+          "type": "str",
+          "default": "\"\"",
+          "description": "Appendix title text"
+        },
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "Appendix body as content block"
+        }
+      ]
+    },
+    {
+      "name": "curriculum-vitae",
+      "file": "sections/cv.typ",
+      "signature": "curriculum-vitae(name: none, body: [])",
+      "description": "Renders the Curriculum Vitae page. Sets `page(numbering: none)` to suppress\n page numbers on CV pages.\n\n ```example\n #curriculum-vitae(body: [\n   == Education\n   Ph.D. Candidate, Indiana University, 2026\n ])\n ```",
+      "params": [
+        {
+          "name": "name",
+          "type": "str | none",
+          "default": "none",
+          "description": "Name (falls back to document.author.first())"
+        },
+        {
+          "name": "body",
+          "type": "content",
+          "default": "[]",
+          "description": "CV content as content block"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+name: Generate Reference
+on:
+  push:
+    paths:
+      - 'institutions/*/template/sections/*.typ'
+      - 'institutions/*/template/template.typ'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Typst
+        run: |
+          gh release download --repo typst/typst --pattern 'typst-x86_64-unknown-linux-musl.tar.xz'
+          tar xJf typst-x86_64-unknown-linux-musl.tar.xz --strip-components=1
+          sudo mv typst /usr/local/bin/
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Generate REFERENCE.json
+        run: |
+          for profile_dir in institutions/*/template/; do
+            if [ -f "$profile_dir/generate-json-ref.typ" ]; then
+              echo "::group::Generating REFERENCE.json for ${profile_dir}"
+              typst eval 'query(<ref>).first().value' --in "$profile_dir/generate-json-ref.typ" --root "$profile_dir" 2>/dev/null | python3 -c "import sys,json; s=json.loads(sys.stdin.read()); data=json.loads(s); print(json.dumps(data, indent=2))" > "$profile_dir/REFERENCE.json"
+              echo "::endgroup::"
+            fi
+          done
+      - name: Verify REFERENCE.json exists and is valid JSON
+        run: |
+          for profile_dir in institutions/*/template/; do
+            if [ -f "$profile_dir/generate-json-ref.typ" ]; then
+              echo "Checking ${profile_dir}REFERENCE.json"
+              python3 -m json.tool "${profile_dir}REFERENCE.json" > /dev/null
+            fi
+          done
+      - name: Verify all functions have doc-comments
+        run: |
+          for profile_dir in institutions/*/template/; do
+            if [ -f "$profile_dir/generate-json-ref.typ" ]; then
+              echo "Checking doc-comment coverage for ${profile_dir}"
+              python3 -c "
+import json, sys
+with open('${profile_dir}REFERENCE.json') as f:
+    data = json.load(f)
+missing = []
+for func in data['functions']:
+    desc = func.get('description', '').strip()
+    if not desc:
+        missing.append(func['name'])
+if missing:
+    print(f'ERROR: {len(missing)} functions missing doc-comments:')
+    for name in missing:
+        print(f'  - {name}')
+    sys.exit(1)
+print(f'All {len(data[\"functions\"])} functions have doc-comments.')
+"
+            fi
+          done
+      - name: Commit and push REFERENCE.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add institutions/*/template/REFERENCE.json
+          if git diff --staged --quiet; then
+            echo "No changes to REFERENCE.json"
+          else
+            git commit -m "chore: update REFERENCE.json [skip ci]"
+            git push
+          fi
