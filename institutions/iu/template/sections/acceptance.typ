@@ -1,7 +1,25 @@
 #import "../styles.typ": iu-body-size, committee-members, defense-date
 
+/// Renders the acceptance page with committee signatures.
+/// Committee members and defense date default to values from `styles.typ`.
+/// Override per-workspace via `data.json`.
+///
+/// @example
+/// ```typ
+/// #acceptance-page(
+///   committee: ((name: "Dr. Smith", degree: "Ph.D.", role: "Chair"),),
+///   defense_date: "May 2026",
+/// )
+/// ```
+/// @endexample
+///
+/// -> none
 #let acceptance-page(
+  /// Committee members: list of dicts {name: str, degree: str, role: str}
+  /// -> array
   committee: committee-members,
+  /// Defense date string (e.g., "May 2026")
+  /// -> str
   defense_date: defense-date,
 ) = {
   pagebreak()
