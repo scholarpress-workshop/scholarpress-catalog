@@ -1,4 +1,21 @@
-#let list-of-abbreviations(entries: ()) = {
+/// Renders the List of Abbreviations.
+/// Entries must be a list of **positional 2-tuples** `(abbreviation, meaning)` — NOT dicts.
+///
+/// @example
+/// ```typ
+/// #list-of-abbreviations(entries: (
+///   ("API", "Application Programming Interface"),
+///   ("DOI", "Digital Object Identifier"),
+/// ))
+/// ```
+/// @endexample
+///
+/// -> none
+#let list-of-abbreviations(
+  /// Array of 2-tuples: (abbreviation: str, meaning: str)
+  /// -> array
+  entries: (),
+) = {
   pagebreak()
   [
     #align(center, text(12pt)[LIST OF ABBREVIATIONS])

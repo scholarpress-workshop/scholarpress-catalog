@@ -1,11 +1,26 @@
-// TOC ENTRIES — array of dictionaries used in #toc-page(entries: ...)
-//   ((level: 1, title: "Introduction", page: 1),
-//    (level: 2, title: "Background", page: 4), ...)
-//   .level — integer heading level (1 = chapter, 2 = section)
-//   .title — string heading text
-//   .page  — integer page number
+/// Renders the Table of Contents.
+/// Entries must be a list of dicts, each with named keys:
+///   `level` (int) — heading level (1 = chapter, 2 = section)
+///   `title` (str) — heading text
+///   `page` (int) — page number
+///
+/// @example
+/// ```typ
+/// #toc-page(entries: (
+///   (level: 1, title: "Introduction", page: 1),
+///   (level: 2, title: "Background", page: 4),
+/// ))
+/// ```
+/// @endexample
+///
+/// -> none
 #let toc-page(
+  /// Array of dicts {level: int, title: str, page: int}
+  /// -> array
   entries: (),
+  /// Page number for the Curriculum Vitae entry. When set, the CV entry
+  /// appears with its page number (currently without leader dots).
+  /// -> int | none
   cv-page: none,
 ) = {
   pagebreak()

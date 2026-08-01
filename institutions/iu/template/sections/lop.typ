@@ -1,4 +1,20 @@
-#let list-of-pictures(entries: ()) = {
+/// Renders the List of Pictures.
+/// Entries must be a list of **positional 2-tuples** `(title, page)` — NOT dicts.
+///
+/// @example
+/// ```typ
+/// #list-of-pictures(entries: (
+///   ("Photo 1: Study Site", 30),
+/// ))
+/// ```
+/// @endexample
+///
+/// -> none
+#let list-of-pictures(
+  /// Array of 2-tuples: (title: str, page: int)
+  /// -> array
+  entries: (),
+) = {
   pagebreak()
   [
     #align(center, text(12pt)[LIST OF PICTURES])
