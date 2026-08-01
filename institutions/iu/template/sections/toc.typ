@@ -4,14 +4,12 @@
 ///   `title` (str) — heading text
 ///   `page` (int) — page number
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #toc-page(entries: (
 ///   (level: 1, title: "Introduction", page: 1),
 ///   (level: 2, title: "Background", page: 4),
 /// ))
 /// ```
-/// @endexample
 ///
 /// -> none
 #let toc-page(

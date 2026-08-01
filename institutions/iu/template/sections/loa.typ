@@ -1,14 +1,12 @@
 /// Renders the List of Abbreviations.
 /// Entries must be a list of **positional 2-tuples** `(abbreviation, meaning)` — NOT dicts.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #list-of-abbreviations(entries: (
 ///   ("API", "Application Programming Interface"),
 ///   ("DOI", "Digital Object Identifier"),
 /// ))
 /// ```
-/// @endexample
 ///
 /// -> none
 #let list-of-abbreviations(

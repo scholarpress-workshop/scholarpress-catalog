@@ -2,15 +2,13 @@
 /// Entries are **raw content** — NOT tuples or dicts.
 /// Pass citation text directly as a content block.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #references-page(entries: [
 ///   Author, A. (2020). Title of work. *Journal*, 12(3), 45--67.
 ///
 ///   Author, B. (2021). Another title. *Publisher*.
 /// ])
 /// ```
-/// @endexample
 ///
 /// -> none
 #let references-page(

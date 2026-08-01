@@ -1,10 +1,8 @@
 /// Renders the copyright page with year and author name centered vertically.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #copyright-page(year: "2026", author: "Jane Doe")
 /// ```
-/// @endexample
 ///
 /// -> none
 #let copyright-page(

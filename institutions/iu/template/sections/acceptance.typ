@@ -4,14 +4,12 @@
 /// Committee members and defense date default to values from `styles.typ`.
 /// Override per-workspace via `data.json`.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #acceptance-page(
 ///   committee: ((name: "Dr. Smith", degree: "Ph.D.", role: "Chair"),),
 ///   defense_date: "May 2026",
 /// )
 /// ```
-/// @endexample
 ///
 /// -> none
 #let acceptance-page(

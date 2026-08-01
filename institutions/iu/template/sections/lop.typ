@@ -1,13 +1,11 @@
 /// Renders the List of Pictures.
 /// Entries must be a list of **positional 2-tuples** `(title, page)` — NOT dicts.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #list-of-pictures(entries: (
 ///   ("Photo 1: Study Site", 30),
 /// ))
 /// ```
-/// @endexample
 ///
 /// -> none
 #let list-of-pictures(

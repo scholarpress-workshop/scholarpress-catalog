@@ -8,11 +8,9 @@
 /// Custom metadata (school, degree, department, campus, month, year)
 /// defaults to values from `styles.typ`.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #title-page(title: "A Study of X", author: "Jane Doe")
 /// ```
-/// @endexample
 ///
 /// -> none
 #let title-page(

@@ -1,13 +1,11 @@
 /// Renders the List of Figures.
 /// Entries must be a list of **positional 2-tuples** `(title, page)` — NOT dicts.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #list-of-figures(entries: (
 ///   ("Figure 1.1: System Architecture", 15),
 /// ))
 /// ```
-/// @endexample
 ///
 /// -> none
 #let list-of-figures(

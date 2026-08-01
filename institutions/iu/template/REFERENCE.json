@@ -27,7 +27,7 @@
       "name": "title-page",
       "file": "sections/title-page.typ",
       "signature": "title-page(title: none, author: none, school: school-name, degree: degree-name, department: department-name, campus: campus-name, month: grad-month, year: grad-year)",
-      "description": "Renders the dissertation title page.\n Reads `document.title` and `document.author.first()` from globals\n when `title` or `author` are `none`. Set globals in entry.typ:\n   `#set document(title: \"My Title\", author: \"Jane Doe\")`\n Then call `#title-page()` with zero arguments.\n Custom metadata (school, degree, department, campus, month, year)\n defaults to values from `styles.typ`.\n\n @example\n ```typ\n #title-page(title: \"A Study of X\", author: \"Jane Doe\")\n ```\n @endexample",
+      "description": "Renders the dissertation title page.\n Reads `document.title` and `document.author.first()` from globals\n when `title` or `author` are `none`. Set globals in entry.typ:\n   `#set document(title: \"My Title\", author: \"Jane Doe\")`\n Then call `#title-page()` with zero arguments.\n Custom metadata (school, degree, department, campus, month, year)\n defaults to values from `styles.typ`.\n\n ```example\n #title-page(title: \"A Study of X\", author: \"Jane Doe\")\n ```",
       "params": [
         {
           "name": "title",
@@ -83,7 +83,7 @@
       "name": "acceptance-page",
       "file": "sections/acceptance.typ",
       "signature": "acceptance-page(committee: committee-members, defense_date: defense-date)",
-      "description": "Renders the acceptance page with committee signatures.\n Committee members and defense date default to values from `styles.typ`.\n Override per-workspace via `data.json`.\n\n @example\n ```typ\n #acceptance-page(\n   committee: ((name: \"Dr. Smith\", degree: \"Ph.D.\", role: \"Chair\"),),\n   defense_date: \"May 2026\",\n )\n ```\n @endexample",
+      "description": "Renders the acceptance page with committee signatures.\n Committee members and defense date default to values from `styles.typ`.\n Override per-workspace via `data.json`.\n\n ```example\n #acceptance-page(\n   committee: ((name: \"Dr. Smith\", degree: \"Ph.D.\", role: \"Chair\"),),\n   defense_date: \"May 2026\",\n )\n ```",
       "params": [
         {
           "name": "committee",
@@ -103,7 +103,7 @@
       "name": "copyright-page",
       "file": "sections/copyright.typ",
       "signature": "copyright-page(year: \"\", author: \"\")",
-      "description": "Renders the copyright page with year and author name centered vertically.\n\n @example\n ```typ\n #copyright-page(year: \"2026\", author: \"Jane Doe\")\n ```\n @endexample",
+      "description": "Renders the copyright page with year and author name centered vertically.\n\n ```example\n #copyright-page(year: \"2026\", author: \"Jane Doe\")\n ```",
       "params": [
         {
           "name": "year",
@@ -215,7 +215,7 @@
       "name": "toc-page",
       "file": "sections/toc.typ",
       "signature": "toc-page(entries: (), cv-page: none)",
-      "description": "Renders the Table of Contents.\n Entries must be a list of dicts, each with named keys:\n   `level` (int) \u2014 heading level (1 = chapter, 2 = section)\n   `title` (str) \u2014 heading text\n   `page` (int) \u2014 page number\n\n @example\n ```typ\n #toc-page(entries: (\n   (level: 1, title: \"Introduction\", page: 1),\n   (level: 2, title: \"Background\", page: 4),\n ))\n ```\n @endexample",
+      "description": "Renders the Table of Contents.\n Entries must be a list of dicts, each with named keys:\n   `level` (int) \u2014 heading level (1 = chapter, 2 = section)\n   `title` (str) \u2014 heading text\n   `page` (int) \u2014 page number\n\n ```example\n #toc-page(entries: (\n   (level: 1, title: \"Introduction\", page: 1),\n   (level: 2, title: \"Background\", page: 4),\n ))\n ```",
       "params": [
         {
           "name": "entries",
@@ -235,7 +235,7 @@
       "name": "list-of-tables",
       "file": "sections/lot.typ",
       "signature": "list-of-tables(entries: ())",
-      "description": "Renders the List of Tables.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-tables(entries: (\n   (\"Table 1.1: Sample Results\", 23),\n   (\"Table 2.1: Summary Statistics\", 47),\n ))\n ```\n @endexample",
+      "description": "Renders the List of Tables.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n ```example\n #list-of-tables(entries: (\n   (\"Table 1.1: Sample Results\", 23),\n   (\"Table 2.1: Summary Statistics\", 47),\n ))\n ```",
       "params": [
         {
           "name": "entries",
@@ -249,7 +249,7 @@
       "name": "list-of-figures",
       "file": "sections/lof.typ",
       "signature": "list-of-figures(entries: ())",
-      "description": "Renders the List of Figures.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-figures(entries: (\n   (\"Figure 1.1: System Architecture\", 15),\n ))\n ```\n @endexample",
+      "description": "Renders the List of Figures.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n ```example\n #list-of-figures(entries: (\n   (\"Figure 1.1: System Architecture\", 15),\n ))\n ```",
       "params": [
         {
           "name": "entries",
@@ -263,7 +263,7 @@
       "name": "list-of-pictures",
       "file": "sections/lop.typ",
       "signature": "list-of-pictures(entries: ())",
-      "description": "Renders the List of Pictures.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-pictures(entries: (\n   (\"Photo 1: Study Site\", 30),\n ))\n ```\n @endexample",
+      "description": "Renders the List of Pictures.\n Entries must be a list of **positional 2-tuples** `(title, page)` \u2014 NOT dicts.\n\n ```example\n #list-of-pictures(entries: (\n   (\"Photo 1: Study Site\", 30),\n ))\n ```",
       "params": [
         {
           "name": "entries",
@@ -277,7 +277,7 @@
       "name": "list-of-abbreviations",
       "file": "sections/loa.typ",
       "signature": "list-of-abbreviations(entries: ())",
-      "description": "Renders the List of Abbreviations.\n Entries must be a list of **positional 2-tuples** `(abbreviation, meaning)` \u2014 NOT dicts.\n\n @example\n ```typ\n #list-of-abbreviations(entries: (\n   (\"API\", \"Application Programming Interface\"),\n   (\"DOI\", \"Digital Object Identifier\"),\n ))\n ```\n @endexample",
+      "description": "Renders the List of Abbreviations.\n Entries must be a list of **positional 2-tuples** `(abbreviation, meaning)` \u2014 NOT dicts.\n\n ```example\n #list-of-abbreviations(entries: (\n   (\"API\", \"Application Programming Interface\"),\n   (\"DOI\", \"Digital Object Identifier\"),\n ))\n ```",
       "params": [
         {
           "name": "entries",
@@ -323,7 +323,7 @@
       "name": "references-page",
       "file": "sections/references.typ",
       "signature": "references-page(entries: [])",
-      "description": "Renders the References page.\n Entries are **raw content** \u2014 NOT tuples or dicts.\n Pass citation text directly as a content block.\n\n @example\n ```typ\n #references-page(entries: [\n   Author, A. (2020). Title of work. *Journal*, 12(3), 45--67.\n\n   Author, B. (2021). Another title. *Publisher*.\n ])\n ```\n @endexample",
+      "description": "Renders the References page.\n Entries are **raw content** \u2014 NOT tuples or dicts.\n Pass citation text directly as a content block.\n\n ```example\n #references-page(entries: [\n   Author, A. (2020). Title of work. *Journal*, 12(3), 45--67.\n\n   Author, B. (2021). Another title. *Publisher*.\n ])\n ```",
       "params": [
         {
           "name": "entries",

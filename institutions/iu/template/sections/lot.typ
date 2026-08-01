@@ -1,14 +1,12 @@
 /// Renders the List of Tables.
 /// Entries must be a list of **positional 2-tuples** `(title, page)` — NOT dicts.
 ///
-/// @example
-/// ```typ
+/// ```example
 /// #list-of-tables(entries: (
 ///   ("Table 1.1: Sample Results", 23),
 ///   ("Table 2.1: Summary Statistics", 47),
 /// ))
 /// ```
-/// @endexample
 ///
 /// -> none
 #let list-of-tables(
