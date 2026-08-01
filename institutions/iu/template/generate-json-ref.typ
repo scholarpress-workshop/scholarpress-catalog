@@ -16,7 +16,6 @@
   ("chapter", "sections/chapters.typ"),
   ("references-page", "sections/references.typ"),
   ("appendices-section", "sections/appendices.typ"),
-  ("appendix", "sections/appendices.typ"),
   ("curriculum-vitae", "sections/cv.typ"),
 )
 
