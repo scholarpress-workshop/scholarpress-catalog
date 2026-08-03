@@ -40,6 +40,10 @@
     }
     #set page(numbering: "1")
 
+    #if first {
+      place(right + bottom, text(size: 1pt)[BODYSTART])
+    }
+
     // Chapter title — show rule only applies styling, doesn't replace heading
     #show heading.where(level: 1): it => {
       align(center, text(
