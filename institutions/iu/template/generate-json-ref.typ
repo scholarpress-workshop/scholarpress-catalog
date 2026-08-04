@@ -95,6 +95,10 @@
       description: "$ starts math mode in Typst prose. Use \\$ to escape (e.g., \\$17 million)."
     ),
     (
+      key: "set_scoping",
+      description: "Typst #set is module-scoped — applies only to content in the same module. Section functions capture template.typ's #set rules, not the entry file's. Entry file's own #set page(numbering: \"i\") is redundant (template already handles it). Content passed via `body: [...]` IS styled by entry file's #set text(...) since content blocks are created in the entry file's scope."
+    ),
+    (
       key: "chapter_per_file",
       description: "Each chapter is one file in `chapters/`. ch01.typ exports `#let ch-name = [...]`. Entry file imports and calls `#chapter(number: \"1\", title: \"Title\", body: ch-name, first: true)`."
     ),

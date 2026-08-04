@@ -8,6 +8,22 @@
 /// Back matter (references, appendices) must set their own numbering or they
 /// inherit the top-level Roman numeral.
 ///
+/// = #set Scoping
+/// Typst's `#set` is module-scoped — it only applies to content produced in
+/// the same module. Section functions defined in this template capture
+/// template.typ's `#set` rules, not the entry file's. An entry file's own
+/// `#set page(numbering: "i")` is redundant — the template already handles it.
+///
+/// CORRECT entry file pattern:
+///   #import "template.typ": title-page, ...
+///   #set document(title: [...], author: "...")
+///   #let committee-members = (...)  // per-template globals
+///   #title-page()  // uses template.typ's #set rules
+/// Content blocks passed via `body: [...]` ARE styled by the entry file's
+/// `#set text(...)` because they're created in the entry file's scope.
+/// If the template and entry file both set text to the same values, the
+/// duplication is harmless but unnecessary.
+///
 /// = Heading Hierarchy
 /// Chapter title: rendered by `chapter()` as `=` (H1).
 /// Inside chapter body write `==` (H2 — centered, underlined, numbered "1.1")
@@ -62,6 +78,10 @@
 //   Chapter body (1=): chapter() sets page(numbering: "1") internally.
 //   Back matter: references & appendices MUST set their own numbering
 //   or they inherit the top-level "i" (Roman numerals).
+//
+//   Typst #set is module-scoped: section functions capture THIS template's
+//   #set rules, not the entry file's. Duplicating #set page(...) in the
+//   entry file is harmless but unnecessary.
 //
 // HEADING HIERARCHY
 //   Chapter title: rendered by chapter(). Agent writes `==` (H2) and

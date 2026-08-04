@@ -1,5 +1,12 @@
 // Zero-arg test: all metadata set via globals, no per-section overrides.
 // Compile with: typst compile test-global.typ
+//
+// #set SCOPING NOTE: Typst #set is module-scoped. Section functions imported
+// from template.typ capture the template's own #set rules, not the entry
+// file's. The #set page(...) and #set text(...) below are redundant with
+// what template.typ already sets — they're harmless but unnecessary.
+// Content blocks passed via body: [...] ARE styled by this file's #set text
+// because they're created here, not in template.typ.
 
 #import "../template/styles.typ": iu-page-setup, iu-heading-size, iu-body-font
 #import "../template/sections/title-page.typ": title-page
