@@ -48,7 +48,7 @@
 
 #title-page()
 #acceptance-page()
-#copyright-page()
+#copyright-page(year: grad-year, author: "Jane A. Doe")
 #dedication-page(body: [To my family.])
 #acknowledgements-page(body: [I would like to thank...])
 #preface-page(body: [This dissertation explores...])
