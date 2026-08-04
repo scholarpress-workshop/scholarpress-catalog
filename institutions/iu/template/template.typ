@@ -116,7 +116,7 @@
 #import "sections/loa.typ": list-of-abbreviations
 #import "sections/chapters.typ": chapter
 #import "sections/references.typ": references-page
-#import "sections/appendices.typ": appendix
+#import "sections/appendices.typ": appendix, appendices-section
 #import "sections/cv.typ": curriculum-vitae
 
 #set page(
