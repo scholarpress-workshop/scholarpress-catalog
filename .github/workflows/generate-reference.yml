@@ -43,22 +43,7 @@ jobs:
           for profile_dir in institutions/*/template/; do
             if [ -f "$profile_dir/generate-json-ref.typ" ]; then
               echo "Checking doc-comment coverage for ${profile_dir}"
-              python3 -c "
-import json, sys
-with open('${profile_dir}REFERENCE.json') as f:
-    data = json.load(f)
-missing = []
-for func in data['functions']:
-    desc = func.get('description', '').strip()
-    if not desc:
-        missing.append(func['name'])
-if missing:
-    print(f'ERROR: {len(missing)} functions missing doc-comments:')
-    for name in missing:
-        print(f'  - {name}')
-    sys.exit(1)
-print(f'All {len(data[\"functions\"])} functions have doc-comments.')
-"
+              python3 scripts/check_doc_comments.py "$profile_dir"
             fi
           done
       - name: Commit and push REFERENCE.json
