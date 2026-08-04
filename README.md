@@ -2,18 +2,15 @@
 
 <img src="catalog_owl.jpg" alt="scholarpress-catalog logo" width="180" align="right">
 
-Open-data registry of formatting profiles, Typst templates, and test fixtures for the [ScholarPress](https://github.com/scholarpress-workshop) ecosystem.
+Open-data registry of formatting profiles, Typst templates, test fixtures, and CI tooling for the [ScholarPress](https://github.com/scholarpress-workshop) ecosystem.
 
-**Zero code dependencies** — pure data repository consumed by [`scholarpress-backend`](https://github.com/scholarpress-workshop/scholarpress-backend) (Rust) for document extraction and validation.
+**Zero code dependencies** — pure data and Typst consumed by [`scholarpress-backend`](https://github.com/scholarpress-workshop/scholarpress-backend) (Rust) for document extraction, checking, and MCP-based agent workflows.
 
 ## Status
 
-| Entity type | Profile | Support |
-|-------------|---------|---------|
-| Institutions — doctoral dissertations | Indiana University | 33 checks, 16-section Typst template |
-| Servers — manuscript preprints | Arxiv |
-| Journals — manuscript submissions | — |
-| Grants — proposal submissions | — |
+| Entity type | Profile | Checks | Template files |
+|-------------|---------|--------|-----------------|
+| Institutions — doctoral dissertations | Indiana University | 40 | 20 Typst files (3 top-level + 16 sections + 1 chapter) |
 
 Profiles follow a uniform schema regardless of entity type. Adding a new profile requires no code changes in downstream tools.
 
@@ -21,8 +18,10 @@ Profiles follow a uniform schema regardless of entity type. Adding a new profile
 
 ```bash
 git clone https://github.com/scholarpress-workshop/scholarpress-catalog
-cd scholarpress-catalog/institutions/iu/tests/corpus
-./download.sh        # Fetch 16 real dissertation PDFs
+cd scholarpress-catalog/institutions/iu/tests
+
+# Run fixture validation (requires scholarpress-cli from backend)
+bash validate_fixtures.sh
 ```
 
 Set `CATALOG_PATH` for sibling projects:
@@ -31,30 +30,28 @@ Set `CATALOG_PATH` for sibling projects:
 export CATALOG_PATH=/path/to/scholarpress-catalog
 ```
 
-Run fixture validation against the Rust backend:
-
-```bash
-cd institutions/iu/tests
-bash compile.sh              # Generate synthetic margin-test PDFs
-bash validate_fixtures.sh    # Run scholarpress-cli against all fixtures
-```
-
 ## Repository structure
 
 ```
 scholarpress-catalog/
   institutions/           # University formatting requirements
     iu/
-      spec.yaml           # Formatting rules in YAML (33 checks)
-      template/           # 17 Typst files (entrypoint + styles + 15 sections)
+      spec.yaml           # Formatting rules in YAML (40 checks)
+      template/           # 20 Typst files
+        template.typ       # Entry point — imports sections, sets page layout
+        styles.typ         # Shared constants (fonts, sizes, spacing)
+        generate-json-ref.typ  # Generates REFERENCE.json for interface_doc
+        REFERENCE.json      # Pre-rendered function reference (CI-generated)
+        sections/          # 16 per-section Typst files
+        chapters/          # Per-chapter content files (ch01.typ)
       tests/
-        corpus/           # Real dissertations (download.sh)
-        fixtures/         # 10 synthetic margin-test PDFs + compile.sh
+        test-global.typ     # Zero-arg entry file test
+        test-chapters.typ   # Per-file chapter convention test
+        fixtures/           # 11 synthetic PDFs + compile.sh
         expected_results.yaml  # Per-fixture pass/fail assertions
         validate_fixtures.sh   # Runs scholarpress-cli against all fixtures
-  journals/               # Journal submission guidelines (planned)
-  servers/                # Preprint server requirements (planned)
-  grants/                 # Grant proposal formatting (planned)
+  scripts/
+    check_doc_comments.py   # Validates tidy doc-comment coverage (CI)
 ```
 
 ## Profile structure
@@ -67,10 +64,13 @@ Every profile under a top-level directory follows the same layout:
   template/
     template.typ          # Entry point — imports sections, sets page layout
     styles.typ            # Shared constants (fonts, sizes, spacing)
+    generate-json-ref.typ  # Tidy parser → REFERENCE.json
+    REFERENCE.json         # Pre-rendered function signatures and docs
     sections/             # Per-section Typst files
+    chapters/             # Per-chapter content files
   tests/
-    corpus/
-      download.sh         # Fetches real-world PDFs for calibration
+    test-global.typ       # Entry file test with zero-arg section calls
+    test-chapters.typ     # Chapter import convention test
     fixtures/             # Synthetic PDFs with known-good and known-bad parameters
     expected_results.yaml # Per-fixture pass/fail assertions
     validate_fixtures.sh  # Runner script
@@ -80,22 +80,27 @@ Every profile under a top-level directory follows the same layout:
 
 ```
 institutions/iu/
-  spec.yaml              # 33 checks across 9 categories
+  spec.yaml              # 40 checks across 9 categories
   template/
-    template.typ          # Entry point
-    styles.typ            # Shared constants
+    template.typ          # Entry point with doc comments and imports
+    styles.typ            # Shared constants (iu-page-setup, iu-body-font, etc.)
+    generate-json-ref.typ  # Uses tidy to parse doc comments → REFERENCE.json
+    REFERENCE.json         # Machine-readable function reference (CI-generated)
     sections/
-      title-page.typ   | acceptance.typ   | copyright.typ
+      title-page.typ   | acceptance.typ     | copyright.typ
       dedication.typ   | acknowledgements.typ | preface.typ
-      abstract.typ     | toc.typ          | lot.typ
-      lof.typ          | lop.typ          | loa.typ
-      chapters.typ     | references.typ   | appendices.typ
+      abstract.typ     | toc.typ            | lot.typ
+      lof.typ          | lop.typ            | loa.typ
+      chapters.typ     | references.typ     | appendices.typ
       cv.typ
+    chapters/
+      ch01.typ           # Example chapter (per-file convention)
   tests/
-    corpus/
-      download.sh         # Fetches 16 real IU ScholarWorks PDFs (2020-2026)
+    test-global.typ       # Compiles with all sections zero-arg
+    test-chapters.typ     # Tests per-file chapter import pattern
     fixtures/
       compile.sh          # Regenerates synthetic margin-test PDFs via Typst
+      golden.pdf          # test-global.typ compiled output (reference for CI)
       baseline.pdf        # Correct margins: 1.25in sides, 1in top/bottom
       left-narrow.pdf     # L=0.75in → FAIL global_margins
       right-narrow.pdf    # R=0.75in → FAIL global_margins
@@ -161,12 +166,24 @@ checks:
 | `toc_details` | page_numbers_aligned, no_overhang, cv_no_dots | Table of contents formatting |
 | `optional_pages` | copyright_page_format | Optional page checks |
 
+## Typst template conventions
+
+The IU template follows a specific import and calling convention documented in `template.typ` header comments:
+
+- **Named parameters:** All section functions use named parameters (e.g., `#title-page(title: "X", author: "Y")`)
+- **Zero-arg pattern:** Metadata set via `#set document(title: [...], author: "...")` and `#let` globals. Section functions read globals automatically.
+- **Chapter per-file:** Each chapter is one file in `chapters/`. `ch01.typ` exports `#let ch-name = [...]`. Entry file imports and calls `#chapter(number: "1", title: "Title", body: ch-name, first: true)`.
+- **Page numbering:** Template sets `"i"` for front matter. `chapter(first: true)` switches to `"1"` for body.
+- **`#set` scoping:** Typst `#set` is module-scoped. Section functions capture template.typ's rules, not the entry file's.
+
+The full reference is available in `template/REFERENCE.json` (CI-generated from tidy doc comments) and queryable via the MCP `interface_doc` tool.
+
 ## How other modules consume catalog
 
 | Consumer | Mechanism |
 |----------|-----------|
 | `scholarpress-backend` (Rust) | `CATALOG_PATH` env var → `sp-check::spec::load_spec()` loads `spec.yaml` |
-| `scholarpress-backend` publish-service | `Registry::load(catalog_path)` at startup → loads all institution specs and templates |
+| `sp-mcp` (MCP server) | `create_workspace` copies profile to scratch dir; `interface_doc` reads `REFERENCE.json` |
 | `scholarpress-cli` | `--spec path/to/spec.yaml` argument |
 
 ## Fixture validation
@@ -186,12 +203,12 @@ The expected results file:
 
 ```yaml
 fixtures:
-  baseline.pdf:
+  golden.pdf:
     assert_fails: []
     assert_passes:
-      - global_margins
       - margin_symmetry
       - font_size_consistent
+      - copyright_page_format
       # ...
     ignore_others: true
 
@@ -201,14 +218,22 @@ fixtures:
     ignore_others: true
 ```
 
+## CI workflows
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| `generate-reference.yml` | Push to template files | Compiles `generate-json-ref.typ` with tidy, validates doc-comment coverage, commits `REFERENCE.json` |
+| `validate-fixures.yml` | Schedule (6am daily), dispatch | Regenerates synthetic fixtures, runs `validate_fixtures.sh` against backend |
+
 ## Adding a profile
 
 1. Create `<top-level>/<id>/` with `spec.yaml`, `template/`, and `tests/`
 2. `spec.yaml` must follow the schema (checkers reference registered checker names)
 3. Typst template should follow the entrypoint pattern: `template.typ` + `styles.typ` + `sections/`
-4. Add synthetic fixtures with known-good and known-bad PDFs for regression testing
-5. Add `expected_results.yaml` with per-fixture assertions
-6. Add real-world corpus PDFs via `download.sh` script
+4. Add `generate-json-ref.typ` for tidy-based function reference generation
+5. Add synthetic fixtures with known-good and known-bad PDFs for regression testing
+6. Add `expected_results.yaml` with per-fixture assertions
+7. Add `test-global.typ` and `test-chapters.typ` entry file tests
 
 ## Versioning
 
