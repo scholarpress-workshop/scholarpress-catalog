@@ -34,15 +34,16 @@ title-page(
 
 `degree` and `department` are both required. Neither field has a default. Canonical values guide extraction and generation, but explicit custom values remain supported for programs not present in the catalog.
 
-The title-page clause must render exactly as follows, with the supplied department value rendered unchanged:
+The title-page clause must use these explicit Typst line-break markers, including the marker for the blank line before the date. The supplied department value is rendered unchanged:
 
-```text
-Submitted to the faculty of the Indianapolis Graduate School
-in partial fulfillment of the requirements
-for the degree
-{degree}
-{department}
-Indiana University
+```typst
+Submitted to the faculty of the Indianapolis Graduate School \ 
+in partial fulfillment of the requirements \ 
+for the degree \ 
+{degree} \ 
+{department} \ 
+Indiana University \ 
+\ 
 {month} {year}
 ```
 
