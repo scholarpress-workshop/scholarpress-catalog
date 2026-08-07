@@ -76,7 +76,7 @@
 }
 
 #metadata(json.encode((
-  profile: "institutions/iu",
+  profile: "institutions/iu-indianapolis",
   globals: (
     (
       key: "page_numbering",

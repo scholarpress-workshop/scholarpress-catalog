@@ -1,5 +1,5 @@
 {
-  "profile": "institutions/iu",
+  "profile": "institutions/iu-indianapolis",
   "globals": [
     {
       "key": "page_numbering",
@@ -18,6 +18,10 @@
       "description": "$ starts math mode in Typst prose. Use \\$ to escape (e.g., \\$17 million)."
     },
     {
+      "key": "set_scoping",
+      "description": "Typst #set is module-scoped \u2014 applies only to content in the same module. Section functions capture template.typ's #set rules, not the entry file's. Entry file's own #set page(numbering: \"i\") is redundant (template already handles it). Content passed via `body: [...]` IS styled by entry file's #set text(...) since content blocks are created in the entry file's scope."
+    },
+    {
       "key": "chapter_per_file",
       "description": "Each chapter is one file in `chapters/`. ch01.typ exports `#let ch-name = [...]`. Entry file imports and calls `#chapter(number: \"1\", title: \"Title\", body: ch-name, first: true)`."
     }
@@ -26,8 +30,8 @@
     {
       "name": "title-page",
       "file": "sections/title-page.typ",
-      "signature": "title-page(title: none, author: none, school: school-name, degree: degree-name, department: department-name, campus: campus-name, month: grad-month, year: grad-year)",
-      "description": "Renders the dissertation title page.\n Reads `document.title` and `document.author.first()` from globals\n when `title` or `author` are `none`. Set globals in entry.typ:\n   `#set document(title: \"My Title\", author: \"Jane Doe\")`\n Then call `#title-page()` with zero arguments.\n Custom metadata (school, degree, department, campus, month, year)\n defaults to values from `styles.typ`.\n\n ```example\n #title-page(title: \"A Study of X\", author: \"Jane Doe\")\n ```",
+      "signature": "title-page(title: none, author: none, degree: none, department: none, month: grad-month, year: grad-year)",
+      "description": "Renders the dissertation title page.\n Reads `document.title` and `document.author.first()` from globals\n when `title` or `author` are `none`. Set globals in entry.typ:\n   `#set document(title: \"My Title\", author: \"Jane Doe\")`\n Then call `#title-page(degree: ..., department: ...)` with explicit program metadata.\n Degree and department are required. Department values include their\n grammatical prefix and are rendered unchanged.\n Month and year default to values from `styles.typ`.\n\n ```example\n #title-page(\n   title: \"A Study of X\",\n   author: \"Jane Doe\",\n   degree: \"Doctor of Philosophy\",\n   department: \"in the Program of American Studies\",\n )\n ```",
       "params": [
         {
           "name": "title",
@@ -42,28 +46,16 @@
           "description": "Author name (falls back to document.author.first())"
         },
         {
-          "name": "school",
-          "type": "str",
-          "default": "school-name",
-          "description": "School / college name (default: styles.typ school-name)"
-        },
-        {
           "name": "degree",
           "type": "str",
-          "default": "degree-name",
-          "description": "Degree name (default: styles.typ degree-name)"
+          "default": "none",
+          "description": "Formal degree name."
         },
         {
           "name": "department",
           "type": "str",
-          "default": "department-name",
-          "description": "Department name (default: styles.typ department-name)"
-        },
-        {
-          "name": "campus",
-          "type": "str",
-          "default": "campus-name",
-          "description": "Campus name (default: styles.typ campus-name)"
+          "default": "none",
+          "description": "Department or program, including its grammatical prefix."
         },
         {
           "name": "month",

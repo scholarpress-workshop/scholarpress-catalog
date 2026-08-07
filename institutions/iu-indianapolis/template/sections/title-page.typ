@@ -1,15 +1,21 @@
-#import "../styles.typ": iu-body-size, school-name, degree-name, department-name, campus-name, grad-month, grad-year
+#import "../styles.typ": grad-month, grad-year, iu-body-size
 
 /// Renders the dissertation title page.
 /// Reads `document.title` and `document.author.first()` from globals
 /// when `title` or `author` are `none`. Set globals in entry.typ:
 ///   `#set document(title: "My Title", author: "Jane Doe")`
-/// Then call `#title-page()` with zero arguments.
-/// Custom metadata (school, degree, department, campus, month, year)
-/// defaults to values from `styles.typ`.
+/// Then call `#title-page(degree: ..., department: ...)` with explicit program metadata.
+/// Degree and department are required. Department values include their
+/// grammatical prefix and are rendered unchanged.
+/// Month and year default to values from `styles.typ`.
 ///
 /// ```example
-/// #title-page(title: "A Study of X", author: "Jane Doe")
+/// #title-page(
+///   title: "A Study of X",
+///   author: "Jane Doe",
+///   degree: "Doctor of Philosophy",
+///   department: "in the Program of American Studies",
+/// )
 /// ```
 ///
 /// -> none
@@ -20,18 +26,12 @@
   /// Author name (falls back to document.author.first())
   /// -> str | none
   author: none,
-  /// School / college name (default: styles.typ school-name)
+  /// Formal degree name.
   /// -> str
-  school: school-name,
-  /// Degree name (default: styles.typ degree-name)
+  degree: none,
+  /// Department or program, including its grammatical prefix.
   /// -> str
-  degree: degree-name,
-  /// Department name (default: styles.typ department-name)
-  /// -> str
-  department: department-name,
-  /// Campus name (default: styles.typ campus-name)
-  /// -> str
-  campus: campus-name,
+  department: none,
   /// Graduation month (default: styles.typ grad-month)
   /// -> str
   month: grad-month,
@@ -39,6 +39,8 @@
   /// -> str
   year: grad-year,
 ) = {
+  assert(degree != none, message: "title-page requires degree")
+  assert(department != none, message: "title-page requires department")
   context {
     let t = if title != none { title } else { document.title }
     let a = if author != none { author } else { document.author.first() }
@@ -53,12 +55,13 @@
       #v(1fr)
 
       #align(center)[
-        Submitted to the faculty of the #school \
+        Submitted to the faculty of the Indianapolis Graduate School \
         in partial fulfillment of the requirements \
         for the degree \
         #degree \
-        in the #department, \
-        Indiana University #campus \
+        #department \
+        Indiana University \
+        \
 
         #month #year
       ]

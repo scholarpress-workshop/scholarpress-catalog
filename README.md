@@ -10,7 +10,7 @@ Open-data registry of formatting profiles, Typst templates, test fixtures, and C
 
 | Entity type | Profile | Checks | Template files |
 |-------------|---------|--------|-----------------|
-| Institutions — doctoral dissertations | Indiana University | 40 | 20 Typst files (3 top-level + 16 sections + 1 chapter) |
+| Institutions — doctoral dissertations | Indiana University Indianapolis | 40 | 20 Typst files (3 top-level + 16 sections + 1 chapter) |
 
 Profiles follow a uniform schema regardless of entity type. Adding a new profile requires no code changes in downstream tools.
 
@@ -18,7 +18,7 @@ Profiles follow a uniform schema regardless of entity type. Adding a new profile
 
 ```bash
 git clone https://github.com/scholarpress-workshop/scholarpress-catalog
-cd scholarpress-catalog/institutions/iu/tests
+cd scholarpress-catalog/institutions/iu-indianapolis/tests
 
 # Run fixture validation (requires scholarpress-cli from backend)
 bash validate_fixtures.sh
@@ -35,7 +35,7 @@ export CATALOG_PATH=/path/to/scholarpress-catalog
 ```
 scholarpress-catalog/
   institutions/           # University formatting requirements
-    iu/
+    iu-indianapolis/
       spec.yaml           # Formatting rules in YAML (40 checks)
       template/           # 20 Typst files
         template.typ       # Entry point — imports sections, sets page layout
@@ -76,10 +76,10 @@ Every profile under a top-level directory follows the same layout:
     validate_fixtures.sh  # Runner script
 ```
 
-### Example: Indiana University dissertation profile
+### Example: Indiana University Indianapolis dissertation profile
 
 ```
-institutions/iu/
+institutions/iu-indianapolis/
   spec.yaml              # 40 checks across 9 categories
   template/
     template.typ          # Entry point with doc comments and imports
@@ -120,7 +120,7 @@ institutions/iu/
 `spec.yaml` defines formatting rules for a profile. Checks reference named checkers registered in the `sp-check` crate.
 
 ```yaml
-institution: Indiana University
+institution: Indiana University Indianapolis
 source_revision: September 2025
 
 document_structure:
@@ -192,7 +192,7 @@ Each profile includes synthetic PDF fixtures with known margin properties. The `
 
 ```bash
 # Regenerate PDFs from Typst templates
-cd institutions/iu/tests
+cd institutions/iu-indianapolis/tests
 bash fixtures/compile.sh
 
 # Run validation (uses local scholarpress-cli or GHCR Docker image)

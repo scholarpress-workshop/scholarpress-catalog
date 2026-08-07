@@ -1,4 +1,4 @@
-// Zero-arg test: all metadata set via globals, no per-section overrides.
+// Template test with explicit title-page metadata and shared section globals.
 // Compile with: typst compile test-global.typ
 //
 // #set SCOPING NOTE: Typst #set is module-scoped. Section functions imported
@@ -8,7 +8,7 @@
 // Content blocks passed via body: [...] ARE styled by this file's #set text
 // because they're created here, not in template.typ.
 
-#import "../template/styles.typ": iu-page-setup, iu-heading-size, iu-body-font
+#import "../template/styles.typ": iu-body-font, iu-heading-size, iu-page-setup
 #import "../template/sections/title-page.typ": title-page
 #import "../template/sections/acceptance.typ": acceptance-page
 #import "../template/sections/copyright.typ": copyright-page
@@ -32,6 +32,8 @@
   author: "Jane A. Doe",
 )
 
+#let grad-year = "2026"
+
 #let committee-members = (
   (name: "Dr. Alice Smith", degree: "Ph.D.", role: "Chair"),
   (name: "Dr. Bob Jones", degree: "Ph.D.", role: ""),
@@ -39,14 +41,22 @@
   (name: "Dr. David Brown", degree: "Ed.D.", role: ""),
 )
 #let defense-date = "May 2026"
-#let school-name = "Indiana University"
-#let degree-name = "Doctor of Philosophy"
-#let department-name = "Computer Science"
-#let campus-name = "Bloomington"
-#let grad-month = "May"
-#let grad-year = "2026"
+#title-page(
+  degree: "Doctor of Philosophy",
+  department: "in the Program of American Studies",
+  month: "May",
+  year: "2026",
+)
 
-#title-page()
+#pagebreak()
+#title-page(
+  title: "Forensic Evidence",
+  author: "Test Author",
+  degree: "Master of Science in Forensic Science",
+  department: "in the Department of Forensic Science",
+  month: "December",
+  year: "2026",
+)
 #acceptance-page()
 #copyright-page(year: grad-year, author: "Jane A. Doe")
 #dedication-page(body: [To my family.])
@@ -58,13 +68,18 @@
   ],
 )
 #toc-page()
-#chapter(number: "1", title: "Introduction", body: [
-  == Background
-  This is a test chapter.
+#chapter(
+  number: "1",
+  title: "Introduction",
+  body: [
+    == Background
+    This is a test chapter.
 
-  === Subsection
-  More content here.
-], first: true)
+    === Subsection
+    More content here.
+  ],
+  first: true,
+)
 #chapter(number: "2", title: "Methods", body: [
   == Experimental Design
   The experiment was designed to test...

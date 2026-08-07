@@ -18,7 +18,7 @@
 ///   #import "template.typ": title-page, ...
 ///   #set document(title: [...], author: "...")
 ///   #let committee-members = (...)  // per-template globals
-///   #title-page()  // uses template.typ's #set rules
+///   #title-page(degree: "Doctor of Philosophy", department: "in the Program of American Studies")
 /// Content blocks passed via `body: [...]` ARE styled by the entry file's
 /// `#set text(...)` because they're created in the entry file's scope.
 /// If the template and entry file both set text to the same values, the
@@ -58,7 +58,7 @@
 //       abstract-page, acknowledgements-page, preface-page, chapter,
 //       references-page, curriculum-vitae
 //
-//     #title-page()
+//     #title-page(degree: "Doctor of Philosophy", department: "in the Program of American Studies")
 //     #dedication-page(body: [dedication text])
 //     #toc-page(entries: toc_data)
 //     #abstract-page(body: [abstract text])
@@ -69,9 +69,9 @@
 //
 // GLOBAL METADATA
 //   Set once at top: #set document(title: [...], author: "Name")
-//   Custom metadata (committee, dates, school, etc.): #let vars in styles.typ
+//   Custom metadata (committee, dates, etc.): #let vars in styles.typ
 //   Sections read globals automatically — no per-section parameters needed:
-//     #title-page()  ← zero-arg call reads document metadata
+//     #title-page(degree: "...", department: "...")
 //
 // PAGE NUMBERING
 //   Front matter (i=): set page(numbering: "i") at top level.

@@ -1,4 +1,4 @@
-institution: Indiana University
+institution: Indiana University Indianapolis
 source_revision: September 2025
 document_structure:
   front_matter:
@@ -107,7 +107,7 @@ checks:
     page: title_page
     element: clause
   params:
-    template: 'Submitted to the faculty of the {school}
+    template: 'Submitted to the faculty of the Indianapolis Graduate School
 
       in partial fulfillment of the requirements
 
@@ -115,9 +115,9 @@ checks:
 
       {degree}
 
-      in the {department},
+      {department}
 
-      Indiana University {campus}
+      Indiana University
 
       {month} {year}
 

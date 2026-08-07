@@ -25,17 +25,17 @@ run_check() {
   local pdf="$1"
   if [ -n "${BACKEND_PATH:-}" ]; then
     cargo run --manifest-path "$BACKEND_PATH/Cargo.toml" -q -p scholarpress-cli -- \
-      check --spec "$CATALOG_ROOT/institutions/iu/spec.yaml" --json "$pdf" 2>/dev/null
+      check --spec "$CATALOG_ROOT/institutions/iu-indianapolis/spec.yaml" --json "$pdf" 2>/dev/null
   else
     docker run --rm \
       -v "$CATALOG_ROOT:$CATALOG_MOUNT:ro" \
       "$IMAGE" \
       scholarpress check \
-        --spec "$CATALOG_MOUNT/institutions/iu/spec.yaml" \
+        --spec "$CATALOG_MOUNT/institutions/iu-indianapolis/spec.yaml" \
         --json \
-        "$CATALOG_MOUNT/institutions/iu/tests/fixtures/$(basename "$pdf")" 2>/dev/null || \
+        "$CATALOG_MOUNT/institutions/iu-indianapolis/tests/fixtures/$(basename "$pdf")" 2>/dev/null || \
     cargo run --manifest-path "$CATALOG_ROOT/../scholarpress-backend/Cargo.toml" -q -p scholarpress-cli -- \
-      check --spec "$CATALOG_ROOT/institutions/iu/spec.yaml" --json "$pdf" 2>/dev/null || true
+      check --spec "$CATALOG_ROOT/institutions/iu-indianapolis/spec.yaml" --json "$pdf" 2>/dev/null || true
   fi
 }
 
